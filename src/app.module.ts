@@ -16,6 +16,7 @@ import { Report } from './reports/report.entity';
       database: 'db.sqlite',
       // Add all entities here
       entities: [User, Report],
+      // sync true only in development environment
       synchronize: true,
     }),
   ],
