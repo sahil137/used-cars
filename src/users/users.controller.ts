@@ -11,14 +11,20 @@ import {
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import {
+  Serialize,
+  SerializeInterceptor,
+} from 'src/interceptors/serialize.interceptor';
+import { UserDto } from './dtos/user.dto';
 
 @Controller('auth')
+// controller wide serailize decorator
+@Serialize(UserDto)
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post('sign-up')
   createUser(@Body() body: CreateUserDto) {
-    console.log(body);
     return this.userService.create(body.email, body.password);
   }
 
@@ -30,8 +36,10 @@ export class UsersController {
     return this.userService.update(id, body);
   }
 
+  // @UseInterceptors(new SerializeInterceptor(UserDto))
   @Get('user/:id')
   findUser(@Param('id', ParseIntPipe) id: number) {
+    console.log('Handler is running');
     return this.userService.findOne(id);
   }
 
